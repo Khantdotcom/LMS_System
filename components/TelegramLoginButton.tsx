@@ -6,9 +6,19 @@ export default function TelegramLoginButton({ botName }: { botName: string }) {
   useEffect(() => {
     // Define the global callback
     // @ts-ignore
-    window.onTelegramAuth = (user: any) => {
+    window.onTelegramAuth = async (user: any) => {
       alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + ')')
-      console.log('Telegram User Data:', user)
+      console.log('Sending to backend', user)
+      const response = await fetch('/api/auth/login',{
+        method:'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(user),
+      })
+      if (response.ok){
+        window.location.href = '/dashboard'
+      } else{
+        alert('Login failed. Check console.')
+      }
     }
 
     const script = document.createElement('script')
