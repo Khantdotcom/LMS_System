@@ -2,6 +2,7 @@ import {prisma} from '@/lib/db'
 import {cookies} from 'next/headers'
 import {redirect} from 'next/navigation'
 import Image from 'next/image'
+import {EventList} from './user_events'
 
 export default async function Dashboard(){
     const cookieStore = await cookies()
@@ -61,6 +62,11 @@ export default async function Dashboard(){
                 <p className="text-xl text-blue-300">{user.currentCompany}</p>
             </div>
         </div>
+                <div>
+                    <h2 className="text-2xl font-bold mb-6 border-l-4 border-blue-500 pl-4">Upcoming Sessions</h2>
+                    {/* The Server Component loads here */}
+                    <EventList />
+                </div>
     </div>
     </main>
     )
