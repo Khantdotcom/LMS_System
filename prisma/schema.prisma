@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role{
+  USER
+  MENTOR
+  ADMIN
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String?
+  role Role @default(USER)
+
+  currentPosition String? @map("current_position")
+  currentCompany String? @map("current_company")
+  linkedin String?
+
+  xp Int @default(0)
+
+  telegramId String @unique @map("telegram_id")
+  attendedEvents Attendance[]
+  mentoredEvents Event[] @relation("MentoredEvents")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  photoUrl String @map("photo_url")
+
+  @@map("users")
+}
+
+model Event{
+  id Int @id @default(autoincrement())
+  zoomLink String @map("zoom_link")
+  zoomPasscode String? @map("zoom_passcode")
+
+  title String
+  date DateTime
+  description String 
+
+  mentor User @relation("MentoredEvents",fields:[mentorId],references:[id])
+  mentorId Int @map("mentor_id")
+
+  attendees Attendance[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("events")
+}
+
+model Attendance{
+  id Int @id @default(autoincrement())
+
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  userId Int @map("user_id")
+
+  event Event @relation(fields:[eventId],references:[id],onDelete:Cascade)
+  eventId Int @map("event_id")
+
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  @@unique([userId,eventId])
+  @@map("attendance")
+}
