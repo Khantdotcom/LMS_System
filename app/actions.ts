@@ -24,9 +24,9 @@ export async function createEvent(formData: FormData){
             description: `g`,
             mentor: {
              create: {
-            telegramId: `22222`,
-            name: `Pann`,
-            email: `pann@giftedinternational.com`,
+            telegramId: `229222`,
+            name: `Pa`,
+            email: `pan@giftedinternational.com`,
             photoUrl: ``,
             xp: 0,
             currentPosition: "Khant's Wife",
@@ -39,3 +39,4 @@ export async function createEvent(formData: FormData){
 
     redirect('/dashboard')
 }
+
