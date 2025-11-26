@@ -13,47 +13,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role{
+enum Role {
   USER
   MENTOR
   ADMIN
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  email String @unique
-  name String?
-  role Role @default(USER)
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  role  Role    @default(USER)
 
   currentPosition String? @map("current_position")
-  currentCompany String? @map("current_company")
-  linkedin String?
+  currentCompany  String? @map("current_company")
+  linkedin        String?
 
   xp Int @default(0)
 
-  telegramId String @unique @map("telegram_id")
+  telegramId     String       @unique @map("telegram_id")
   attendedEvents Attendance[]
-  mentoredEvents Event[] @relation("MentoredEvents")
+  mentoredEvents Event[]      @relation("MentoredEvents")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  photoUrl String @map("photo_url")
+  photoUrl  String      @map("photo_url")
+  MagicLink MagicLink[]
 
   @@map("users")
 }
 
-model Event{
-  id Int @id @default(autoincrement())
-  zoomLink String @map("zoom_link")
+model Event {
+  id           Int     @id @default(autoincrement())
+  zoomLink     String  @map("zoom_link")
   zoomPasscode String? @map("zoom_passcode")
 
-  title String
-  date DateTime
-  description String 
+  title       String
+  date        DateTime
+  description String
 
-  mentor User @relation("MentoredEvents",fields:[mentorId],references:[id])
-  mentorId Int @map("mentor_id")
+  mentor   User @relation("MentoredEvents", fields: [mentorId], references: [id])
+  mentorId Int  @map("mentor_id")
 
   attendees Attendance[]
 
@@ -63,17 +64,28 @@ model Event{
   @@map("events")
 }
 
-model Attendance{
+model Attendance {
   id Int @id @default(autoincrement())
 
-  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
-  userId Int @map("user_id")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("user_id")
 
-  event Event @relation(fields:[eventId],references:[id],onDelete:Cascade)
-  eventId Int @map("event_id")
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId Int   @map("event_id")
 
   joinedAt DateTime @default(now()) @map("joined_at")
 
-  @@unique([userId,eventId])
+  @@unique([userId, eventId])
   @@map("attendance")
+}
+
+model MagicLink {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("magic_links")
 }
