@@ -38,8 +38,9 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  photoUrl  String      @map("photo_url")
-  MagicLink MagicLink[]
+  photoUrl   String       @map("photo_url")
+  MagicLink  MagicLink[]
+  Enrollment Enrollment[]
 
   @@map("users")
 }
@@ -58,8 +59,9 @@ model Event {
 
   attendees Attendance[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  Enrollment Enrollment[]
 
   @@map("events")
 }
@@ -88,4 +90,22 @@ model MagicLink {
   createdAt DateTime @default(now())
 
   @@map("magic_links")
+}
+
+model Enrollment {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id])
+
+  screenshotUrl String
+  status        String @default("PENDING")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, eventId])
 }

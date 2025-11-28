@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
+      <change afterPath="$PROJECT_DIR$/app/actions/enroll.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +102,7 @@
       <workItem from="1764147682270" duration="4659000" />
       <workItem from="1764211889632" duration="121000" />
       <workItem from="1764297242517" duration="1209000" />
-      <workItem from="1764340760417" duration="622000" />
+      <workItem from="1764340760417" duration="2571000" />
     </task>
     <task id="LOCAL-00001" summary="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
       <option name="closed" value="true" />
@@ -116,7 +120,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764297266499</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
+      <option name="closed" value="true" />
+      <created>1764343022691</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1764343022692</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
