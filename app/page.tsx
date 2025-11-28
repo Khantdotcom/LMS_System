@@ -8,7 +8,7 @@ export default function Home() {
       <div className = "z-10 max-w-5xl w-full items-center justify-center font-mono text-sm flex flex-col gap-8">
         <h1 className = "text-4xl font-bod text-blue-600">GIFT-Ed Circle</h1>
         <div className = "bg-white p-8 rounded-xl shadow-lg border border-gray-100 w-full max-w-md text-center">
-          <h2 className="text-xl font-semibold mb-6">Member Login</h2>
+          <h2 className="text-xl text-black font-semibold mb-6">Member Login</h2>
           <TelegramLoginButton botName={BOT_USERNAME} />
         </div>
       </div>

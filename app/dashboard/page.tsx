@@ -2,7 +2,7 @@ import {prisma} from '@/lib/db'
 import {cookies} from 'next/headers'
 import {redirect} from 'next/navigation'
 import Image from 'next/image'
-import {EventList} from './user_events'
+import {EventList} from '@/components/user_events'
 
 export default async function Dashboard(){
     const cookieStore = await cookies()

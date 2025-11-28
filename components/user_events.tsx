@@ -1,5 +1,6 @@
 import {prisma} from '@/lib/db'
 import {Calendar,Video} from 'lucide-react'
+import Link from "next/link";
 
 
 export async function EventList(){
@@ -30,15 +31,13 @@ export async function EventList(){
                     <Calendar size={16}/>
                     <span>{event.date.toLocaleDateString()} at {event.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
                 </div>
-
-                <a
-                href={event.zoomLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded-lg w-full justify-center transition-colors">
-                    <Video size={16}/>
-                    Attend The Session
-                </a>
+                    <Link
+                        href={`/events/${event.id}/register`}
+                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded-lg w-full justify-center transition-colors"
+                    >
+                        <Video size={16} />
+                        Register Now!
+                    </Link>
                 </div>
             ))}
         </div>

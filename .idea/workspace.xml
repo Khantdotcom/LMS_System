@@ -4,12 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
-      <change afterPath="$PROJECT_DIR$/app/actions/enroll.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" afterDir="false" />
+    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Feature: Upload payment screenshot, Register page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/actions/enroll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions/enroll.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/bot/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/bot/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashboard/user_events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/user_events.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/programs/page.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,6 +72,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/components" />
+    </key>
+  </component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
@@ -102,7 +110,7 @@
       <workItem from="1764147682270" duration="4659000" />
       <workItem from="1764211889632" duration="121000" />
       <workItem from="1764297242517" duration="1209000" />
-      <workItem from="1764340760417" duration="2571000" />
+      <workItem from="1764340760417" duration="4962000" />
     </task>
     <task id="LOCAL-00001" summary="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
       <option name="closed" value="true" />
@@ -128,7 +136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764343022692</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Feature: Upload payment screenshot, Register page">
+      <option name="closed" value="true" />
+      <created>1764345004838</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764345004838</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,7 +152,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages" />
+    <MESSAGE value="Feature: Upload payment screenshot, Register page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Feature: Upload payment screenshot, Register page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

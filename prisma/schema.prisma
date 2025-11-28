@@ -95,10 +95,11 @@ model MagicLink {
 model Enrollment {
   id Int @id @default(autoincrement())
 
-  userId Int
+  // You MUST have these two "Int" lines to save by ID
+  userId Int // <--- Make sure this exists!
   user   User @relation(fields: [userId], references: [id])
 
-  eventId Int
+  eventId Int // <--- Make sure this exists!
   event   Event @relation(fields: [eventId], references: [id])
 
   screenshotUrl String

@@ -40,7 +40,7 @@ bot.on('new_chat_members', async (ctx) => {
                     message_thread_id: threadId,
                     ...Markup.inlineKeyboard([
                         [
-                            Markup.button.url('🌐 Visit Platform', 'http://localhost:3000')
+                            Markup.button.url('🌐 Visit Platform', 'https://unchiding-dorris-synovially.ngrok-free.dev/')
                         ]
                     ])
                 }

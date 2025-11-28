@@ -1,14 +1,13 @@
 import { submitPayment } from '@/app/actions/enroll'
 
-// FIX: Change type to Promise
+// FIX: The type of params is now a Promise
 export default async function PaymentPage({
                                               params
                                           }: {
     params: Promise<{ id: string }>
 }) {
-    // FIX: Await the params before using them
-    const resolvedParams = await params
-    const eventId = resolvedParams.id
+    // FIX: We must await the params to get the actual ID
+    const { id } = await params
 
     return (
         <main className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
@@ -22,10 +21,10 @@ export default async function PaymentPage({
                 </div>
 
                 <form action={submitPayment} className="flex flex-col gap-4">
-                    {/* FIX: Use the awaited eventId */}
-                    <input type="hidden" name="eventId" value={eventId} />
+                    {/* FIX: Use the awaited ID here */}
+                    <input type="hidden" name="eventId" value={id} />
 
-                    {/* TEMP FIX: Hardcode userId for testing if you don't have sessions yet */}
+                    {/* User ID (Hardcoded for MVP, later from session) */}
                     <input type="hidden" name="userId" value="1" />
 
                     <label className="block text-sm text-slate-400">Step 2: Upload Screenshot</label>
