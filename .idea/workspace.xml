@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Button Change : Register Now Button added">
-      <change afterPath="$PROJECT_DIR$/app/actions/admin.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/admin/enrollments/page.tsx" afterDir="false" />
+    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Admin server action added. Approve page">
+      <change afterPath="$PROJECT_DIR$/components/PaymentWizard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/actions/enroll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions/enroll.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/events/[id]/register/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +109,8 @@
       <workItem from="1764147682270" duration="4659000" />
       <workItem from="1764211889632" duration="121000" />
       <workItem from="1764297242517" duration="1209000" />
-      <workItem from="1764340760417" duration="5898000" />
+      <workItem from="1764340760417" duration="6011000" />
+      <workItem from="1764351750621" duration="4720000" />
     </task>
     <task id="LOCAL-00001" summary="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
       <option name="closed" value="true" />
@@ -146,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764347531664</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Admin server action added. Approve page">
+      <option name="closed" value="true" />
+      <created>1764348254626</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1764348254626</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,7 +175,8 @@
     <MESSAGE value="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages" />
     <MESSAGE value="Feature: Upload payment screenshot, Register page" />
     <MESSAGE value="Button Change : Register Now Button added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Button Change : Register Now Button added" />
+    <MESSAGE value="Admin server action added. Approve page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Admin server action added. Approve page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

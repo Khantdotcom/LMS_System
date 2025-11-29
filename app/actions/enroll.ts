@@ -11,60 +11,87 @@ cloudinary.config({
 })
 
 export async function submitPayment(formData: FormData) {
-    // 1. Safe Extraction
-    const file = formData.get('screenshot') as File
-    const eventIdRaw = formData.get('eventId')
-    const userIdRaw = formData.get('userId')
+    try {
+        console.log("🚀 Starting Submit Payment...")
 
-    // 2. Debugging Logs (So we can see what's wrong)
-    console.log('--- PAYMENT DEBUG ---')
-    console.log('Event ID Raw:', eventIdRaw)
-    console.log('User ID Raw:', userIdRaw)
-    console.log('File Size:', file?.size)
+        const file = formData.get('screenshot') as File
+        const eventIdRaw = formData.get('eventId')
+        const userIdRaw = formData.get('userId')
 
-    // 3. Validation
-    if (!eventIdRaw || !userIdRaw) {
-        throw new Error('Missing Event ID or User ID. Please refresh the page.')
-    }
+        console.log("📥 Received Data:", { eventIdRaw, userIdRaw, fileSize: file?.size })
 
-    const eventId = parseInt(eventIdRaw.toString())
-    const userId = parseInt(userIdRaw.toString())
+        if (!eventIdRaw || !userIdRaw) throw new Error('Missing IDs')
 
-    if (!file || file.size === 0) {
-        throw new Error('No file uploaded')
-    }
+        const eventId = parseInt(eventIdRaw.toString())
+        const userId = parseInt(userIdRaw.toString())
 
-    // 4. Upload to Cloudinary
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const uploadResult = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-            { folder: 'gifted-payments' },
-            (error, result) => {
-                if (error) reject(error)
-                else resolve(result)
+        // --- 1. Check for Existing Enrollment ---
+        const existing = await prisma.enrollment.findUnique({
+            where: {
+                userId_eventId: { userId, eventId }
             }
-        ).end(buffer)
-    }) as any
+        })
 
-    const imageUrl = uploadResult.secure_url
-
-    // 5. Save to DB (Using "connect" syntax for safety)
-    console.log('Saving to DB...', { userId, eventId, imageUrl })
-
-    await prisma.enrollment.create({
-        data: {
-            // Instead of just passing IDs, we explicitly "connect" them.
-            // This tells Prisma: "Find the User with this ID and link them."
-            user: { connect: { id: userId } },
-            event: { connect: { id: eventId } },
-
-            screenshotUrl: imageUrl,
-            status: 'PENDING'
+        if (existing) {
+            console.log("⚠️ Enrollment already exists:", existing.status)
+            if (existing.status === 'PENDING' || existing.status === 'APPROVED') {
+                return redirect('/dashboard?error=already_enrolled')
+            }
+            // If REJECTED, delete to retry
+            await prisma.enrollment.delete({ where: { id: existing.id } })
         }
-    })
 
-    // 6. Finish
+        // --- 2. Verify User & Event Exist (Prevents "Record not found" crash) ---
+        const userExists = await prisma.user.findUnique({ where: { id: userId } })
+        const eventExists = await prisma.event.findUnique({ where: { id: eventId } })
+
+        if (!userExists) throw new Error(`❌ User ID ${userId} does not exist in DB!`)
+        if (!eventExists) throw new Error(`❌ Event ID ${eventId} does not exist in DB!`)
+
+        // --- 3. Upload to Cloudinary ---
+        if (!file || file.size === 0) throw new Error('No file uploaded')
+
+        console.log("☁️ Uploading to Cloudinary...")
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = Buffer.from(arrayBuffer)
+
+        const uploadResult = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+                { folder: 'gifted-payments' },
+                (error, result) => {
+                    if (error) reject(error)
+                    else resolve(result)
+                }
+            ).end(buffer)
+        }) as any
+
+        const imageUrl = uploadResult.secure_url
+        console.log("✅ Upload Success:", imageUrl)
+
+        // --- 4. Save to DB ---
+        console.log("💾 Saving to Database...")
+        await prisma.enrollment.create({
+            data: {
+                user: { connect: { id: userId } },
+                event: { connect: { id: eventId } },
+                screenshotUrl: imageUrl,
+                status: 'PENDING'
+            }
+        })
+        console.log("🎉 Database Save Complete!")
+
+    } catch (error: any) {
+        // NEXT_REDIRECT is a special error Next.js uses to handle redirects.
+        // We must let it pass through, or redirects won't work.
+        if (error.message === 'NEXT_REDIRECT' || error.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error
+        }
+
+        // Log actual crashes
+        console.error("🔥 SERVER ACTION CRASH:", error.message)
+        throw new Error(error.message) // Send error to client
+    }
+
+    // 5. Success Redirect
     redirect('/dashboard?payment=submitted')
 }

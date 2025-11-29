@@ -5,24 +5,25 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GIFT-Ed Platform",
-  description: "Community Platform",
+    title: "GIFT-Ed Platform",
+    description: "Community Platform",
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      {/* FIX IS HERE: 
-        We add 'suppressHydrationWarning' to the body tag.
-        This stops the error caused by your browser extensions.
+    return (
+        // REQUIRED: The root layout must contain html and body tags
+        <html lang="en">
+        {/* suppressHydrationWarning={true} is added here to stop the
+        "Hydration Mismatch" error caused by your browser extensions
+        injecting extra attributes into the body tag.
       */}
-      <body className={inter.className} suppressHydrationWarning={true}>
+        <body className={inter.className} suppressHydrationWarning={true}>
         {children}
-      </body>
-    </html>
-  );
+        </body>
+        </html>
+    );
 }
