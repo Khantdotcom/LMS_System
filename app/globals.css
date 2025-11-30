@@ -1,26 +1,68 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    /* Light Theme with Cyan Brand Color */
+    --background: #f8fafc; /* Slate 50 */
+    --foreground: #0f172a; /* Slate 900 */
+
+    --primary: #06b6d4; /* Cyan 500 */
+    --primary-foreground: #ffffff;
+
+    --secondary: #e0f2fe; /* Sky 100 */
+    --secondary-foreground: #0284c7; /* Sky 600 */
+
+    --accent: #22d3ee; /* Cyan 400 */
+    --accent-glow: rgba(34, 211, 238, 0.5);
+
+    --card: #ffffff;
+    --card-foreground: #1e293b; /* Slate 800 */
+    --border: #e2e8f0; /* Slate 200 */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-border: var(--border);
+
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode override (optional, or you can force light mode by removing this) */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        /* Keeping a dark mode option but aligning with cyan */
+        --background: #0f172a; /* Slate 900 */
+        --foreground: #f8fafc; /* Slate 50 */
+        --card: #1e293b; /* Slate 800 */
+        --card-foreground: #f8fafc;
+        --border: #334155; /* Slate 700 */
+    }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Glow Effects */
+.glow-button {
+    box-shadow: 0 0 15px var(--accent-glow);
+    transition: all 0.3s ease;
+}
+
+.glow-button:hover {
+    box-shadow: 0 0 25px var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+.glow-text {
+    text-shadow: 0 0 10px var(--accent-glow);
 }

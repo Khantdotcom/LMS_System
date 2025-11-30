@@ -20,29 +20,60 @@ enum Role {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  role  Role    @default(USER)
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String    @unique // Real email is now mandatory
+  emailVerified DateTime?
+  image         String? // Profile picture from Google
+  password      String? // Hashed password (optional, only for email signups)
 
+  // Career Data
   currentPosition String? @map("current_position")
   currentCompany  String? @map("current_company")
-  linkedin        String?
+  industry        String?
 
-  xp Int @default(0)
+  // Onboarding Logic
+  onboardingCompleted Boolean @default(false) @map("onboarding_completed")
+  mentoredEvents      Event[] @relation("MentoredEvents")
 
-  telegramId     String       @unique @map("telegram_id")
-  attendedEvents Attendance[]
-  mentoredEvents Event[]      @relation("MentoredEvents")
+  // Telegram Link (Optional now)
+  telegramId String? @unique @map("telegram_id")
+  xp         Int     @default(0)
+  role       Role    @default(USER)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  accounts       Account[] // For NextAuth (Google)
+  // ... your existing relations (enrollments, magicLinks etc) ...
+  attendedEvents Enrollment[]
+  magicLinks     MagicLink[]
 
-  photoUrl   String       @map("photo_url")
-  MagicLink  MagicLink[]
-  Enrollment Enrollment[]
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  Event      Event[]
+  Attendance Attendance[]
+  Purchase   Purchase[]
 
   @@map("users")
+}
+
+// Standard NextAuth Model for OAuth
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int     @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Event {
@@ -62,6 +93,8 @@ model Event {
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
   Enrollment Enrollment[]
+  User       User?        @relation(fields: [userId], references: [id])
+  userId     Int?
 
   @@map("events")
 }
@@ -109,4 +142,46 @@ model Enrollment {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, eventId])
+}
+
+// prisma/schema.prisma
+
+model Course {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  price       Int
+  thumbnail   String // URL to cover image
+
+  // Content
+  modules Module[]
+
+  // Who bought it?
+  purchases Purchase[]
+
+  createdAt DateTime @default(now())
+}
+
+model Module {
+  id       String @id @default(cuid())
+  title    String
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  // The Content
+  videoUrl String // YouTube Embed URL (e.g. https://www.youtube.com/embed/dQw4w9WgXcQ)
+  order    Int // 1, 2, 3
+}
+
+model Purchase {
+  id     String @id @default(cuid())
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId]) // User buys course only once
 }
