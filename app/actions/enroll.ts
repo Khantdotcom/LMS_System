@@ -26,9 +26,10 @@ export async function submitPayment(formData: FormData) {
         const userId = parseInt(userIdRaw.toString())
 
         // --- 1. Check for Existing Enrollment ---
-        const existing = await prisma.enrollment.findUnique({
+        const existing = await prisma.enrollment.findFirst({
             where: {
-                userId_eventId: { userId, eventId }
+                userId: userId,
+                eventId: eventId
             }
         })
 

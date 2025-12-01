@@ -19,6 +19,17 @@ enum Role {
   ADMIN
 }
 
+enum ProgramType {
+  Events
+  Courses
+}
+
+enum EnrollmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            Int       @id @default(autoincrement())
   name          String?
@@ -51,7 +62,6 @@ model User {
   updatedAt  DateTime     @updatedAt @map("updated_at")
   Event      Event[]
   Attendance Attendance[]
-  Purchase   Purchase[]
 
   @@map("users")
 }
@@ -91,6 +101,8 @@ model Event {
 
   attendees Attendance[]
 
+  isPaid Boolean? @default(false)
+
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
   Enrollment Enrollment[]
@@ -126,25 +138,6 @@ model MagicLink {
   @@map("magic_links")
 }
 
-model Enrollment {
-  id Int @id @default(autoincrement())
-
-  // You MUST have these two "Int" lines to save by ID
-  userId Int // <--- Make sure this exists!
-  user   User @relation(fields: [userId], references: [id])
-
-  eventId Int // <--- Make sure this exists!
-  event   Event @relation(fields: [eventId], references: [id])
-
-  screenshotUrl String
-  status        String @default("PENDING")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, eventId])
-}
-
 // prisma/schema.prisma
 
 model Course {
@@ -158,7 +151,7 @@ model Course {
   modules Module[]
 
   // Who bought it?
-  purchases Purchase[]
+  purchases Enrollment[]
 
   createdAt DateTime @default(now())
 }
@@ -169,20 +162,28 @@ model Module {
   courseId String
   course   Course @relation(fields: [courseId], references: [id])
 
-  // The Content
-  videoUrl String // YouTube Embed URL (e.g. https://www.youtube.com/embed/dQw4w9WgXcQ)
-  order    Int // 1, 2, 3
+  videoUrl String
+  order    Int
 }
 
-model Purchase {
-  id     String @id @default(cuid())
-  userId Int
-  user   User   @relation(fields: [userId], references: [id])
+model Enrollment {
+  id          String      @id @default(cuid())
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  programType ProgramType @default(Events)
+  courseId    String?
+  course      Course?     @relation(fields: [courseId], references: [id])
 
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  eventId Int?
+  event   Event? @relation(fields: [eventId], references: [id])
+
+  status EnrollmentStatus @default(PENDING)
+
+  screenshotUrl String
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, courseId]) // User buys course only once
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId, eventId])
 }

@@ -4,21 +4,26 @@ import Link from 'next/link'
 import { cookies } from 'next/headers'
 
 export default async function EventList() {
-    // 1. Get Current User ID to check enrollments
+    // 1. Get Current User ID safely
     const cookieStore = await cookies()
-    const userId = cookieStore.get('userId')?.value
+    const userIdString = cookieStore.get('userId')?.value
+    const userId = userIdString ? parseInt(userIdString) : null
 
-    // 2. Fetch Events AND User's Enrollments
+    // 2. Fetch ALL Events (so users can see what to buy)
     const events = await prisma.event.findMany({
-        orderBy: { date: 'asc' },
-        include: {
-            attendees: {
-                where: {
-                    userId: userId ? parseInt(userId) : -1 // Filter to only show MY enrollment
-                }
-            }
-        }
+        orderBy: { date: 'asc' }
     })
+
+    // 3. Fetch ONLY this user's enrollments
+    // We create a list of eventIds this user has enrolled in
+    let myEnrollments: any[] = []
+
+    if (userId) {
+        myEnrollments = await prisma.enrollment.findMany({
+            where: { userId: userId },
+            select: { eventId: true, status: true } // We only need status and ID to check match
+        })
+    }
 
     if (events.length === 0) {
         return (
@@ -31,10 +36,12 @@ export default async function EventList() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {events.map((event) => {
-                // Logic: Am I enrolled?
-                const isEnrolled = event.attendees.length > 0
-                const isApproved = isEnrolled && event.attendees[0].status === 'APPROVED'
-                const isPending = isEnrolled && event.attendees[0].status === 'PENDING'
+                // 4. FIND MATCH: Check if user has an enrollment for THIS specific event
+                const enrollment = myEnrollments.find(e => e.eventId === event.id)
+
+                const status = enrollment?.status // 'APPROVED', 'PENDING', 'REJECTED' or undefined
+                const isApproved = status === 'APPROVED'
+                const isPending = status === 'PENDING'
 
                 return (
                     <div
@@ -42,7 +49,9 @@ export default async function EventList() {
                         className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-all shadow-sm flex flex-col justify-between group"
                     >
                         <div>
-                            <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">{event.title}</h3>
+                            <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                                {event.title}
+                            </h3>
                             <div className="flex items-center gap-2 text-foreground/60 text-sm mb-4">
                                 <Calendar size={16} />
                                 <span>

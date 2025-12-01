@@ -4,19 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Feature : Video Course creator">
-      <change afterPath="$PROJECT_DIR$/app/actions/buy.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/admin/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/coursecatalog/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/courses/[courseId]/buy/page.tsx" afterDir="false" />
+    <list default="true" id="55754057-3b4f-43e9-aa0d-0e3b67ccae56" name="Changes" comment="Light Theme Updated">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin/courses/[courseId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin/courses/[courseId]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin/courses/create/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin/courses/create/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin/enrollments/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin/enrollments/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/actions/admin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions/admin.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/actions/enroll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/actions/enroll.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/user_events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/user_events.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
@@ -123,7 +115,8 @@
       <workItem from="1764351750621" duration="5255000" />
       <workItem from="1764485212014" duration="5508000" />
       <workItem from="1764525457044" duration="2886000" />
-      <workItem from="1764571524663" duration="3847000" />
+      <workItem from="1764571524663" duration="3873000" />
+      <workItem from="1764577574741" duration="3843000" />
     </task>
     <task id="LOCAL-00001" summary="Feature: Telegram Bot Welcom Message and Delete &quot;Someone Joined&quot; Messages">
       <option name="closed" value="true" />
@@ -189,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764529402279</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Light Theme Updated">
+      <option name="closed" value="true" />
+      <created>1764575394201</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1764575394201</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,7 +208,8 @@
     <MESSAGE value="Admin server action added. Approve page" />
     <MESSAGE value="Fixed: Payment bugs" />
     <MESSAGE value="Feature : Video Course creator" />
-    <option name="LAST_COMMIT_MESSAGE" value="Feature : Video Course creator" />
+    <MESSAGE value="Light Theme Updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Light Theme Updated" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -218,7 +220,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/admin/courses/[courseId]/page.tsx</url>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

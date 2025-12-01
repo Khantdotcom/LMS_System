@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
 
 export async function approveEnrollment(formData: FormData) {
-    const enrollmentId = parseInt(formData.get('enrollmentId') as string)
+    const enrollmentId = formData.get('enrollmentId') as string
 
     // 1. Update DB
     await prisma.enrollment.update({
