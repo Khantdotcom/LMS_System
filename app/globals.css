@@ -5,14 +5,14 @@
     --background: #f8fafc; /* Slate 50 */
     --foreground: #0f172a; /* Slate 900 */
 
-    --primary: #06b6d4; /* Cyan 500 */
+    --primary: #30D4C7; /* Cyan 500 */
     --primary-foreground: #ffffff;
 
     --secondary: #e0f2fe; /* Sky 100 */
     --secondary-foreground: #0284c7; /* Sky 600 */
 
-    --accent: #22d3ee; /* Cyan 400 */
-    --accent-glow: rgba(34, 211, 238, 0.5);
+    --accent: #30D4C7; /* Cyan 400 */
+    --accent-glow: rgba(34, 100, 238, 0.5);
 
     --card: #ffffff;
     --card-foreground: #1e293b; /* Slate 800 */
@@ -29,22 +29,13 @@
     --color-card: var(--card);
     --color-card-foreground: var(--card-foreground);
     --color-border: var(--border);
+    --color-accent: var(--accent);
 
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
 }
 
 /* Dark mode override (optional, or you can force light mode by removing this) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Keeping a dark mode option but aligning with cyan */
-        --background: #0f172a; /* Slate 900 */
-        --foreground: #f8fafc; /* Slate 50 */
-        --card: #1e293b; /* Slate 800 */
-        --card-foreground: #f8fafc;
-        --border: #334155; /* Slate 700 */
-    }
-}
 
 body {
     background: var(--background);
@@ -54,7 +45,7 @@ body {
 
 /* Glow Effects */
 .glow-button {
-    box-shadow: 0 0 15px var(--accent-glow);
+    box-shadow: 0 0 10px var(--accent-glow);
     transition: all 0.3s ease;
 }
 

@@ -21,40 +21,42 @@ export default async function CourseManagerPage({
     if (!course) return <div>Course not found</div>
 
     return (
-        <main className="min-h-screen bg-slate-950 text-white p-8">
-            <div className="max-w-4xl mx-auto">
+        <main className="bg-background text-foreground p-8">
+            <div className="max-w-6xl mx-auto">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-6">
+                <div className="flex justify-between items-center mb-8 border-b border-border pb-6">
                     <div>
-                        <h1 className="text-3xl font-bold">{course.title}</h1>
-                        <p className="text-slate-400">Course Manager • {course.modules.length} Modules</p>
+                        <h1 className="text-3xl font-bold text-foreground">{course.title}</h1>
+                        <p className="text-foreground/60">Course Manager • {course.modules.length} Modules</p>
                     </div>
-                    <Link href="/courses" className="text-blue-400 hover:underline">
+                    <Link href="/courses" className="text-primary hover:underline font-medium">
                         View Public Page
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                     {/* LEFT: Module List */}
-                    <div className="md:col-span-2 space-y-4">
-                        <h2 className="font-bold text-xl mb-4">Curriculum</h2>
+                    <div className="lg:col-span-2 space-y-4">
+                        <h2 className="font-bold text-xl mb-4 text-foreground">Curriculum</h2>
                         {course.modules.length === 0 ? (
-                            <div className="text-slate-500 italic">No modules yet. Add one on the right. 👉</div>
+                            <div className="text-foreground/40 italic p-8 border border-dashed border-border rounded-xl text-center">
+                                No modules yet. Add one on the right. 👉
+                            </div>
                         ) : (
                             course.modules.map((mod) => (
-                                <div key={mod.id} className="bg-slate-900 border border-slate-800 p-4 rounded-lg flex items-center gap-4">
-                                    <div className="bg-slate-800 p-2 rounded-full text-slate-400">
+                                <div key={mod.id} className="bg-card border border-border p-4 rounded-lg flex items-center gap-4 shadow-sm">
+                                    <div className="bg-secondary/30 p-2 rounded-full text-primary">
                                         <PlayCircle size={20} />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold">{mod.title}</h3>
-                                        <a href={mod.videoUrl} target="_blank" className="text-xs text-blue-500 hover:underline truncate block max-w-[200px]">
+                                        <h3 className="font-semibold text-foreground">{mod.title}</h3>
+                                        <a href={mod.videoUrl} target="_blank" className="text-xs text-primary hover:underline truncate block max-w-[300px]">
                                             {mod.videoUrl}
                                         </a>
                                     </div>
-                                    <div className="ml-auto text-xs text-slate-600 font-mono">
+                                    <div className="ml-auto text-xs text-foreground/40 font-mono">
                                         #{mod.order}
                                     </div>
                                 </div>
@@ -63,27 +65,27 @@ export default async function CourseManagerPage({
                     </div>
 
                     {/* RIGHT: Add Module Form */}
-                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl h-fit">
-                        <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-                            <Plus size={20} className="text-green-400"/> Add Module
+                    <div className="bg-card border border-border p-6 rounded-xl h-fit shadow-md sticky top-24">
+                        <h2 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground">
+                            <Plus size={20} className="text-primary"/> Add Module
                         </h2>
 
                         <form action={addModule} className="flex flex-col gap-4">
                             <input type="hidden" name="courseId" value={course.id} />
 
                             <div>
-                                <label className="text-xs text-slate-400 uppercase font-bold">Module Title</label>
+                                <label className="text-xs text-foreground/60 uppercase font-bold mb-1 block">Module Title</label>
                                 <input name="title" required placeholder="e.g. Intro to Sales"
-                                       className="w-full p-2 rounded bg-slate-800 border border-slate-700 text-sm" />
+                                       className="w-full p-2 rounded bg-background border border-border text-sm focus:ring-2 focus:ring-primary focus:outline-none" />
                             </div>
 
                             <div>
-                                <label className="text-xs text-slate-400 uppercase font-bold">Video URL</label>
+                                <label className="text-xs text-foreground/60 uppercase font-bold mb-1 block">Video URL</label>
                                 <input name="videoUrl" required placeholder="Youtube Embed URL"
-                                       className="w-full p-2 rounded bg-slate-800 border border-slate-700 text-sm" />
+                                       className="w-full p-2 rounded bg-background border border-border text-sm focus:ring-2 focus:ring-primary focus:outline-none" />
                             </div>
 
-                            <button className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg text-sm mt-2">
+                            <button className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-lg text-sm mt-2 shadow-sm transition-all">
                                 Add Module
                             </button>
                         </form>

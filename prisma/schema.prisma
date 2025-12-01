@@ -26,6 +26,7 @@ model User {
   emailVerified DateTime?
   image         String? // Profile picture from Google
   password      String? // Hashed password (optional, only for email signups)
+  photoUrl      String?
 
   // Career Data
   currentPosition String? @map("current_position")

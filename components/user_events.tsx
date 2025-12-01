@@ -1,45 +1,87 @@
-import {prisma} from '@/lib/db'
-import {Calendar,Video} from 'lucide-react'
-import Link from "next/link";
+import { prisma } from '@/lib/db'
+import { Calendar, Video, CreditCard } from 'lucide-react'
+import Link from 'next/link'
+import { cookies } from 'next/headers'
 
+export default async function EventList() {
+    // 1. Get Current User ID to check enrollments
+    const cookieStore = await cookies()
+    const userId = cookieStore.get('userId')?.value
 
-export async function EventList(){
+    // 2. Fetch Events AND User's Enrollments
     const events = await prisma.event.findMany({
-        orderBy:{
-            date:'asc',
+        orderBy: { date: 'asc' },
+        include: {
+            attendees: {
+                where: {
+                    userId: userId ? parseInt(userId) : -1 // Filter to only show MY enrollment
+                }
+            }
         }
     })
 
-    if (events.length ===0){
-        return(
-            <div className="text-center p-8 border border-dashed border-slate-700 rounded-xl text-slate-500">
-                No event scheduled yet
+    if (events.length === 0) {
+        return (
+            <div className="text-center p-8 border border-dashed border-border rounded-xl text-foreground/60">
+                No events scheduled yet.
             </div>
         )
     }
 
-    return(
-        <div className="grid grid-cols md:grid-cols-2 lg:grid-cols3 gap-">
-            {events.map((event)=>(
-                <div
-                key={event.id}
-                className="bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-blue-500 transition-colors">
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {events.map((event) => {
+                // Logic: Am I enrolled?
+                const isEnrolled = event.attendees.length > 0
+                const isApproved = isEnrolled && event.attendees[0].status === 'APPROVED'
+                const isPending = isEnrolled && event.attendees[0].status === 'PENDING'
 
-                <h3 className="text-xl font-bold text-white mb-2">{event.title}</h3>
-
-                <div className="flex items-center gap-2 text-slate-400 text-sm mb-4">
-                    <Calendar size={16}/>
-                    <span>{event.date.toLocaleDateString()} at {event.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
-                </div>
-                    <Link
-                        href={`/events/${event.id}/register`}
-                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded-lg w-full justify-center transition-colors"
+                return (
+                    <div
+                        key={event.id}
+                        className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-all shadow-sm flex flex-col justify-between group"
                     >
-                        <Video size={16} />
-                        Register Now!
-                    </Link>
-                </div>
-            ))}
+                        <div>
+                            <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">{event.title}</h3>
+                            <div className="flex items-center gap-2 text-foreground/60 text-sm mb-4">
+                                <Calendar size={16} />
+                                <span>
+                                    {event.date.toLocaleDateString()} at {event.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* DYNAMIC BUTTON LOGIC */}
+                        {isApproved ? (
+                            <a
+                                href={event.zoomLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg w-full justify-center transition-colors"
+                            >
+                                <Video size={16} />
+                                Join Zoom Session
+                            </a>
+                        ) : isPending ? (
+                            <button
+                                disabled
+                                className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-600 text-sm font-medium py-2 px-4 rounded-lg w-full justify-center cursor-not-allowed border border-amber-200"
+                            >
+                                ⏳ Payment Reviewing...
+                            </button>
+                        ) : (
+                            <Link
+                                href={`/events/${event.id}/register`}
+                                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium py-2 px-4 rounded-lg w-full justify-center transition-colors glow-button"
+                            >
+                                <CreditCard size={16} />
+                                Secure Your Spot
+                            </Link>
+                        )}
+
+                    </div>
+                )
+            })}
         </div>
     )
 }
