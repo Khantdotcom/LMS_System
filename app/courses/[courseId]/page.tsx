@@ -1,96 +1,112 @@
 import { prisma } from '@/lib/db'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { Lock, PlayCircle } from 'lucide-react'
+import { Lock, Unlafock, PlayCircle } from 'lucide-react'
 import Link from 'next/link'
+import { auth } from '@/auth'
+// Note: We removed 'import Image from "next/image"' to avoid the hostname error
 
-export default async function CoursePage({
-                                             params
-                                         }: {
-    params: Promise<{ courseId: string }>
-}) {
-    const { courseId } = await params
+export default async function CoursesPage() {
     const session = await auth()
 
-    // 1. Get Course Data
-    const course = await prisma.course.findUnique({
-        where: { id: courseId },
-        include: { modules: { orderBy: { order: 'asc' } } }
+    // 1. Fetch all courses
+    const courses = await prisma.course.findMany({
+        include: {
+            _count: { select: { modules: true } }
+        },
+        orderBy: { createdAt: 'desc' }
     })
 
-    if (!course) return <div>Course not found</div>
+    // 2. Check which ones the user has bought
+    let purchasedCourseIds: string[] = []
 
-    // 2. Check Access (Did they buy it?)
-    let hasAccess = false
     if (session?.user?.email) {
-        const user = await prisma.user.findUnique({ where: { email: session.user.email } })
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            include: { purchases: true }
+        })
         if (user) {
-            const purchase = await prisma.purchase.findUnique({
-                where: {
-                    userId_courseId: {
-                        userId: user.id,
-                        courseId: course.id
-                    }
-                }
-            })
-            if (purchase) hasAccess = true
+            purchasedCourseIds = user.purchases.map(p => p.courseId)
         }
     }
 
     return (
-        <main className="min-h-screen bg-slate-950 text-white p-8">
-            <div className="max-w-4xl mx-auto">
+        <main className="min-h-screen bg-slate-950 text-white p-8 font-sans">
+            <div className="max-w-6xl mx-auto">
 
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
-                    <p className="text-slate-400">{course.description}</p>
+                <div className="mb-12 text-center">
+                    <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                        Learning Programs
+                    </h1>
+                    <p className="text-slate-400">Master the soft skills that accelerate your career.</p>
                 </div>
 
-                {/* Video Grid */}
-                <div className="grid gap-6">
-                    {course.modules.map((module) => (
-                        <div key={module.id} className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex items-center justify-between group">
+                {courses.length === 0 ? (
+                    <div className="text-center py-20 border border-dashed border-slate-800 rounded-2xl bg-slate-900/50">
+                        <p className="text-xl text-slate-500">🚀 Programs are launching soon.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {courses.map((course) => {
+                            const isUnlocked = purchasedCourseIds.includes(course.id)
 
-                            <div className="flex items-center gap-4">
-                                <div className={`p-3 rounded-full ${hasAccess ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-800 text-slate-500'}`}>
-                                    {hasAccess ? <PlayCircle size={24} /> : <Lock size={24} />}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">{module.title}</h3>
-                                    <p className="text-sm text-slate-500">Video Lesson</p>
-                                </div>
-                            </div>
+                            return (
+                                <div key={course.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all group flex flex-col">
 
-                            {hasAccess ? (
-                                // UNLOCKED: Show "Watch" button
-                                <Link
-                                    href={`/courses/${course.id}/learn/${module.id}`}
-                                    className="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors"
-                                >
-                                    Watch Now
-                                </Link>
-                            ) : (
-                                // LOCKED: Show Price tag
-                                <div className="text-slate-500 text-sm font-medium flex items-center gap-2">
-                                    <Lock size={14} /> Locked
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                                    {/* Thumbnail Area */}
+                                    <div className="h-48 bg-slate-800 relative overflow-hidden">
+                                        {course.thumbnail ? (
+                                            /* CHANGED: Switched from <Image /> to standard <img> to handle external URLs safely */
+                                            <img
+                                                src={course.thumbnail}
+                                                alt={course.title}
+                                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900 to-slate-900">
+                                                <PlayCircle size={48} className="text-white/20" />
+                                            </div>
+                                        )}
 
-                {/* CTA for Non-Buyers */}
-                {!hasAccess && (
-                    <div className="mt-12 p-8 bg-gradient-to-r from-blue-900/50 to-purple-900/50 border border-blue-800 rounded-2xl text-center">
-                        <h2 className="text-2xl font-bold mb-4">Unlock Full Access</h2>
-                        <p className="text-blue-200 mb-6">Get lifetime access to {course.title} for only {course.price.toLocaleString()} MMK.</p>
-                        <Link
-                            href={`/courses/${course.id}/buy`} // We will build this "Buy" page later (similar to payment wizard)
-                            className="inline-block px-8 py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-100 transition-transform hover:scale-105"
-                        >
-                            Enroll Now
-                        </Link>
+                                        {/* Status Badge */}
+                                        <div className="absolute top-4 right-4">
+                                            {isUnlocked ? (
+                                                <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 backdrop-blur-md">
+                                                    <Unlock size={12} /> OWNED
+                                                </span>
+                                            ) : (
+                                                <span className="bg-black/50 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 backdrop-blur-md border border-white/10">
+                                                    <Lock size={12} /> {course.price.toLocaleString()} MMK
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                                        <p className="text-slate-400 text-sm mb-4 flex-grow line-clamp-3">
+                                            {course.description}
+                                        </p>
+
+                                        <div className="flex items-center justify-between text-xs text-slate-500 mb-6">
+                                            <span>{course._count.modules} Lessons</span>
+                                            <span>Video Course</span>
+                                        </div>
+
+                                        <Link
+                                            href={`/courses/${course.id}`}
+                                            className={`w-full py-3 rounded-xl font-bold text-center transition-all ${
+                                                isUnlocked
+                                                    ? 'bg-green-600 hover:bg-green-500 text-white'
+                                                    : 'bg-white text-black hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            {isUnlocked ? 'Continue Learning' : 'View Details'}
+                                        </Link>
+                                    </div>
+
+                                </div>
+                            )
+                        })}
                     </div>
                 )}
 

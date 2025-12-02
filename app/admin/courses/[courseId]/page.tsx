@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db'
+import {prisma} from '@/lib/db'
 import { addModule } from '@/app/actions/course'
 import { PlayCircle, Plus, Video } from 'lucide-react'
 import Link from 'next/link'

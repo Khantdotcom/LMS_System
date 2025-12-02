@@ -4,10 +4,25 @@ import Link from 'next/link'
 import { auth } from '@/auth'
 import Image from 'next/image'
 
+// 1. Add this helper function at the top of your file
+function getThumbnail(url: string | null) {
+    if (!url) return null;
+
+    // If user pasted a YouTube video link, extract the ID and return the thumbnail image
+    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    const match = url.match(youtubeRegex);
+
+    if (match && match[1]) {
+        return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`;
+    }
+
+    // Otherwise, assume it's already a direct image link
+    return url;
+}
+
 export default async function CoursesPage() {
     const session = await auth()
 
-    // 1. Fetch all courses
     const courses = await prisma.course.findMany({
         include: {
             _count: { select: { modules: true } }
@@ -15,8 +30,6 @@ export default async function CoursesPage() {
         orderBy: { createdAt: 'desc' }
     })
 
-    // 2. Check which ones the user has bought
-    // We get a list of courseIds that the user has purchased
     let purchasedCourseIds: string[] = []
 
     if (session?.user?.email) {
@@ -32,7 +45,6 @@ export default async function CoursesPage() {
     return (
         <main className="min-h-screen bg-slate-950 text-white p-8 font-sans">
             <div className="max-w-6xl mx-auto">
-
                 <div className="mb-12 text-center">
                     <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
                         Learning Programs
@@ -49,14 +61,17 @@ export default async function CoursesPage() {
                         {courses.map((course) => {
                             const isUnlocked = purchasedCourseIds.includes(course.id)
 
+                            // 2. Use the helper here
+                            const thumbnailSrc = getThumbnail(course.thumbnail);
+
                             return (
                                 <div key={course.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all group flex flex-col">
 
-                                    {/* Thumbnail Area */}
                                     <div className="h-48 bg-slate-800 relative">
-                                        {course.thumbnail ? (
+                                        {/* 3. Check for thumbnailSrc instead of course.thumbnail */}
+                                        {thumbnailSrc ? (
                                             <Image
-                                                src={course.thumbnail}
+                                                src={thumbnailSrc}
                                                 alt={course.title}
                                                 fill
                                                 className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
@@ -67,7 +82,6 @@ export default async function CoursesPage() {
                                             </div>
                                         )}
 
-                                        {/* Status Badge */}
                                         <div className="absolute top-4 right-4">
                                             {isUnlocked ? (
                                                 <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 backdrop-blur-md">
@@ -81,7 +95,6 @@ export default async function CoursesPage() {
                                         </div>
                                     </div>
 
-                                    {/* Content */}
                                     <div className="p-6 flex flex-col flex-grow">
                                         <h3 className="text-xl font-bold mb-2">{course.title}</h3>
                                         <p className="text-slate-400 text-sm mb-4 flex-grow line-clamp-3">
@@ -104,13 +117,11 @@ export default async function CoursesPage() {
                                             {isUnlocked ? 'Continue Learning' : 'View Details'}
                                         </Link>
                                     </div>
-
                                 </div>
                             )
                         })}
                     </div>
                 )}
-
             </div>
         </main>
     )

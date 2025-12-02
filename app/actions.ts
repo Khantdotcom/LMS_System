@@ -24,13 +24,13 @@ export async function createEvent(formData: FormData){
             description: `g`,
             mentor: {
              create: {
-            telegramId: `229882`,
-            name: `Yee Mon`,
-            email: `yeemon@giftedinternational.com`,
+            telegramId: `2298298340882`,
+            name: `Khant`,
+            email: `khanthtay@giftedinternational.com`,
             photoUrl: ``,
             xp: 0,
-            currentPosition: "Marketing Head",
-            currentCompany: "Henry",
+            currentPosition: "CTO",
+            currentCompany: "GIFTED",
             role: 'USER',
              }}
     }})
